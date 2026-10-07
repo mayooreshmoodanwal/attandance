@@ -7,7 +7,7 @@ function App() {
   useEffect(() => {
     async function APIcall() {
       try {
-        const response = await fetch("http://localhost:8080/products");
+        const response = await fetch("https://attandance-9op9.onrender.com/products");
         const data = await response.json();
 
         console.log(data);
