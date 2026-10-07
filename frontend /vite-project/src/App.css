@@ -1,0 +1,296 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* ==========================================================================
+   CSS Variables & Design Tokens
+   ========================================================================== */
+:root {
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Color Palette */
+  --bg-primary: #090d16;
+  --bg-surface: rgba(18, 24, 38, 0.72);
+  --bg-surface-hover: rgba(26, 34, 54, 0.88);
+  --bg-card-image: radial-gradient(circle at center, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.85) 100%);
+  
+  /* Accents */
+  --accent-primary: #6366f1;
+  --accent-glow: rgba(99, 102, 241, 0.25);
+  --accent-border: rgba(99, 102, 241, 0.4);
+  --price-color: #34d399;
+  --price-bg: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.08) 100%);
+  --price-border: rgba(52, 211, 153, 0.25);
+  
+  /* Text */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  
+  /* Elevation & Shadows */
+  --shadow-card: 0 10px 28px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --shadow-card-hover: 0 20px 38px -12px rgba(0, 0, 0, 0.65), 0 0 24px rgba(99, 102, 241, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  
+  /* Animation */
+  --transition-smooth: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ==========================================================================
+   Global & Reset Styles
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.12) 0px, transparent 45%),
+    radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 55%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #090d16;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================================================
+   Main Grid Container
+   Targets both direct JSX structure (#root > div) and semantic classes
+   ========================================================================== */
+#root > div,
+.products-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  align-items: stretch;
+}
+
+/* ==========================================================================
+   Header / Page Title
+   Spans across all grid columns
+   ========================================================================== */
+#root > div > h1,
+.products-header,
+.products-title {
+  grid-column: 1 / -1;
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  position: relative;
+  
+  /* Shimmering Gradient Text */
+  background: linear-gradient(135deg, #ffffff 25%, #cbd5e1 55%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 14px rgba(129, 140, 248, 0.25));
+}
+
+/* Glowing Decorative Accent Bar under Heading */
+#root > div > h1::after,
+.products-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6366f1, #06b6d4);
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.6);
+}
+
+/* ==========================================================================
+   Product Card
+   Direct child divs representing mapped products
+   ========================================================================== */
+#root > div > div,
+.product-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  position: relative;
+  transition: var(--transition-smooth);
+}
+
+/* Card Subtle Ambient Highlight */
+#root > div > div::before,
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Card Hover State */
+#root > div > div:hover,
+.product-card:hover {
+  transform: translateY(-8px);
+  background: var(--bg-surface-hover);
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ==========================================================================
+   Product Image Container & Thumbnail
+   ========================================================================== */
+#root > div > div > img,
+.product-card img,
+.product-image {
+  width: 100% !important;
+  height: 220px;
+  object-fit: contain;
+  background: var(--bg-card-image);
+  padding: 22px;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.4s ease;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
+}
+
+#root > div > div:hover > img,
+.product-card:hover img {
+  transform: scale(1.06);
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.45));
+}
+
+/* ==========================================================================
+   Product Title (h2)
+   ========================================================================== */
+#root > div > div > h2,
+.product-card h2,
+.product-title {
+  font-size: 1.18rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text-main);
+  margin: 20px 20px 10px 20px;
+  letter-spacing: -0.01em;
+  
+  /* Multiline clamp: 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  overflow: hidden;
+  min-height: 2.7em;
+  transition: color 0.25s ease;
+}
+
+#root > div > div:hover > h2,
+.product-card:hover h2 {
+  color: #a5b4fc;
+}
+
+/* ==========================================================================
+   Product Description (First <p> in Card)
+   ========================================================================== */
+#root > div > div > p:first-of-type,
+.product-card .description,
+.product-description {
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin: 0 20px 20px 20px;
+  flex-grow: 1; /* Pushes price to the bottom */
+  
+  /* Multiline clamp: 3 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Product Price (Last <p> in Card)
+   Styled as a high-contrast badge
+   ========================================================================== */
+#root > div > div > p:last-of-type,
+.product-card .price,
+.product-price {
+  margin: auto 20px 20px 20px;
+  padding: 12px 18px;
+  background: var(--price-bg);
+  border: 1px solid var(--price-border);
+  border-radius: 12px;
+  color: var(--price-color);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.08);
+  transition: var(--transition-smooth);
+}
+
+#root > div > div:hover > p:last-of-type,
+.product-card:hover .price {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 182, 212, 0.14) 100%);
+  border-color: rgba(52, 211, 153, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.18);
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 900px) {
+  #root > div,
+  .products-container {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+    padding: 36px 16px 60px;
+  }
+}
+
+@media (max-width: 560px) {
+  #root > div,
+  .products-container {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 28px 14px 48px;
+  }
+  
+  #root > div > div > img,
+  .product-card img {
+    height: 200px;
+  }
+}
